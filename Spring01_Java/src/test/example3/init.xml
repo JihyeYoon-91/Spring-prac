@@ -2,8 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
-	<!-- WeaponImpl 객체를 생성하고 그 객체의 이름을 myWeapon으로 부여한다. -->
-	<bean id="myWeapon" class="test.mypac.TestWeapon"/>
-
-
+	<!--WeaponImpl 객체를 생성해서 관리하도록 하고 id는 따로 부여하지 않는다. -->
+	<bean class="test.mypac.WeaponImpl"/>
+	<bean class="test.mypac.CarImpl"/>
 </beans>
