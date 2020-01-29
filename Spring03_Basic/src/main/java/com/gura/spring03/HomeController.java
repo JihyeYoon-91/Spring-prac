@@ -3,9 +3,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 /*
  *  @Controller 어노테이션
  *  -해당 클래스가 Spring MVC프로젝트에서 Controller가 될 수 있도록 한다.
@@ -40,4 +42,19 @@ public class HomeController {
 		 */
 		return "home";
 	}	
+	@RequestMapping("/play")
+	public ModelAndView play(HttpSession session,
+			ModelAndView mView) {
+		//세션에 로그인 정보가 있는지 확인한다.
+		String id=(String)session.getAttribute("id");
+		if(id==null) {//로그인이 되지 않은상태
+			//로그인 폼으로 리다일렉트 시킨다.
+			mView.setViewName("redirect:/users/loginForm.do");
+		}else {//로그인이 된 상태
+			//forward이동해서 응답한다.
+			mView.setViewName("play");
+			
+		}
+		return mView;
+	}
 }
