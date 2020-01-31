@@ -23,7 +23,7 @@ public class HomeController {
 	public String home(HttpServletRequest request) {
 			//모델
 			List<String> notice=new ArrayList<>();
-			notice.add("감기조심");
+			notice.add("감기조심");  
 			notice.add("코로나 조심");
 			notice.add("다들 살아 남아요");
 			notice.add("어쩌구..");

@@ -11,6 +11,7 @@ public class MainClass {
 			WeaponImpl w1=new WeaponImpl();
 			//메소드를 호출함으로써 목적을 달성한다.
 			useWeapon(w1);
+			
 			TestWeapon w2=new TestWeapon();
 			useWeapon(w2);
 		}

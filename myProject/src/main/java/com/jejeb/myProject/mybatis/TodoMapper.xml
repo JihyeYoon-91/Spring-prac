@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="todo">
+<select id="getList" resultType="com.jejeb.myProject.todo.dto.TodoDto">
+	SELECT num,content,regdate
+	FROM todo
+	ORDER BY num ASC
+</select>
+<insert id="insert" parameterType="com.jejeb.myProject.todo.dto.TodoDto">
+	INSERT INTO todo
+	(num,content,regdate)
+	VALUES(todo_seq.NEXTVAL,#{content},SYSDATE)
+</insert>
+<delete id="delete" parameterType="int">
+		DELETE FROM todo
+		WHERE num=#{num} 
+</delete>
+<select id="getData" resultType="com.jejeb.myProject.todo.dto.TodoDto"
+parameterType="int">
+	SELECT num,content,regdate
+	FROM todo 
+	WHERE num=#{num}
+</select>
+<update id="update" parameterType="com.jejeb.myProject.todo.dto.TodoDto">
+	UPDATE todo
+	SET num=#{num},content=#{content},regdate=SYSDATE
+	WHERE num=#{num}
+</update>
+</mapper>
+ 
