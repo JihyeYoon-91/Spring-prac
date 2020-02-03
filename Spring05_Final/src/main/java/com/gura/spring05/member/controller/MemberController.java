@@ -11,21 +11,24 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.gura.spring05.member.dao.MemberDao;
 import com.gura.spring05.member.dto.MemberDto;
+import com.gura.spring05.member.service.MemberService;
 
 @Controller
 public class MemberController {
 	//의존객체 주입받기(DI)
 	@Autowired //여러개 일때는 @Reasource(name = "xx" ) 로 구분한다. 이름은(memberdaoimpl에있다.) //@Repository("xx") 이런식으로 부여할 수 있다.
-	private MemberDao dao;
+	private MemberDao dao;	
+	@Autowired 
+	private MemberService service;
 	
 	//회원목록보기요청(/member/list.do)을 처리할 컨트롤러 메소드 
 	@RequestMapping("/member/list")
 	public ModelAndView list(ModelAndView mView) {
-		
-		List<MemberDto> list=dao.getlist();
-		mView.addObject("list",list);
+		//MemberServiceImpl 객체를 이용해서 비즈니스 로직처리
+		service.getList(mView);
+		//view page정보를 담고
 		mView.setViewName("member/list");
-		return mView;
+		return mView; //Model과 view page정보가 담긴 객체를 리턴해준다.
 	}
 	//회원정보 삭제요청처리
 	@RequestMapping("/member/delete")
