@@ -65,7 +65,7 @@ public class UsersController {
 		
 	}	
 	/*
-	 * @ModelAttribue어노테이션과 함께 Dto룰 매소드의 인자로 선언하면
+	 * @ModelAttribute어노테이션과 함께 Dto룰 매소드의 인자로 선언하면
 	 * 전송되는 파라미터가 자동추출 되엇 Dto객체에  담겨서 인자로 전달된다.
 	 * 단, 전송되는 파라미터명과 Dto의 필드명이 같아야한다.
 	 */
