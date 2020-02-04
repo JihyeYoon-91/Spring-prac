@@ -89,12 +89,12 @@ public class UsersController {
 	//로그아웃 요청 처리하는 메소드
 	@RequestMapping("/users/logout")
 	public String logout(HttpSession session) {
-		session.invalidate();
+		 session.invalidate(); 
 		/*
 		 * forward이동이 아닌 리다일렉트 이동 응답을 하려면
 		 * view page정보를
 		 * "redirect : 리다일렉트 시킬 정대 경로"
-		 * 와 형식으로 작성하면 된다.
+		 * 위 형식으로 작성하면 된다.
 		 * 단, context path는 작성하지 않는다.
 		 */
 		return"redirect:/home.do";

@@ -17,7 +17,6 @@ public class MemberDaoImpl implements MemberDao{
 
 	@Override
 	public List<MemberDto> getlist() {
-		
 		List<MemberDto> list=session.selectList("member.getList");
 		return list;
 	}

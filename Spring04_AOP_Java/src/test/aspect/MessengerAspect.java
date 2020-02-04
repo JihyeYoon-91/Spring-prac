@@ -16,7 +16,7 @@ public class MessengerAspect {
 	 * 위의 3가지 조건을 모두 만족시키는 메소드에 아래의 aop가 적용된다.
 	 */
 	
-	//(*send*(*))메소드 인자 한개 (* send*(*,*))메소드인자 두개  
+	//(*send*(*))메소드 인자 한개 (* send*(*,*))메소드인자 두개    -'*' : 모든 값을 표현 -'..' : 0개 이상을 의미
 	//(*send*(java.lang.String,test.dto.MemberDto)) 인자 두개이며 type은 (String,MemberDto)
 	@Around("execution(* send*(..))") 
 	public void around(ProceedingJoinPoint joinPoint) throws Throwable {

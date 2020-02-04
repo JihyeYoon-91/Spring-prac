@@ -11,17 +11,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.jejeb.myProject.todo.dao.TodoDao;
 import com.jejeb.myProject.todo.dto.TodoDto;
+import com.jejeb.myProject.todo.service.TodoService;
 
 @Controller
 public class TodoController {
 	@Autowired
 	private TodoDao dao;
+	@Autowired
+	private TodoService service;
 	
 	//todo목록보기
 	@RequestMapping("/todo/list")
 	public ModelAndView list(ModelAndView mView) {
-		List<TodoDto> list=dao.getList();
-		mView.addObject("list",list);
+		service.getList(mView);
 		mView.setViewName("todo/list");
 		return mView;
 	}
@@ -32,22 +34,21 @@ public class TodoController {
 	@RequestMapping("/todo/insert")
 	public ModelAndView insert(@ModelAttribute("dto") TodoDto dto,
 			ModelAndView mView) {
-		dao.insert(dto);
+		service.addTodo(dto);
 		mView.setViewName("todo/insert");
 		return mView;
 	}
 	@RequestMapping("/todo/update")
 	public ModelAndView update(@ModelAttribute("dto") TodoDto dto,
 			ModelAndView mView) {
-		dao.update(dto);
+		service.updateTodo(dto);
 		mView.setViewName("todo/update");
 		return mView;
 	}
 	@RequestMapping("/todo/updateform")
 	public ModelAndView updateform(@RequestParam int num,
 			ModelAndView mView) {
-		TodoDto dto=dao.getData(num);
-		mView.addObject("dto",dto);
+		service.getTodo(mView, num);
 		mView.setViewName("todo/updateform");
 		return mView;
 	}
