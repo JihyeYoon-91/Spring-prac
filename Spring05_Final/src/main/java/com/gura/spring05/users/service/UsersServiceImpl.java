@@ -138,6 +138,13 @@ public class UsersServiceImpl implements UsersService{
 		mView.addObject("isSuccess",true);		
 		
 	}
+
+	@Override
+	public void deleteUser(String id,HttpServletRequest request) {
+		request.getSession().invalidate();
+		dao.deleteUser(id);
+		
+	}
 	
 
 }

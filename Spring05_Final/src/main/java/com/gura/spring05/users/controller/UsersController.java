@@ -213,4 +213,10 @@ public class UsersController {
 		 mView.setViewName("users/update");
 		 return mView;
 	  }	
+	@RequestMapping("/users/delete")
+	public String delete(HttpServletRequest request) { 
+		String id=(String)request.getSession().getAttribute("id");
+		service.deleteUser(id,request);
+		return "users/delete"; 
+	}
 }

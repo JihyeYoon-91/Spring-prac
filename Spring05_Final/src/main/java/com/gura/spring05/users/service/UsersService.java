@@ -22,4 +22,5 @@ public interface UsersService {
 			ModelAndView mView);
 	public void getUser(ModelAndView mView, String id);
 	public void updateUser(ModelAndView mView,UsersDto dto);
+	public void deleteUser(String id,HttpServletRequest request);
 }
