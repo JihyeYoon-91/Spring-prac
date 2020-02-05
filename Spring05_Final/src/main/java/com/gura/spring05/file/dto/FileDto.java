@@ -23,6 +23,12 @@ public class FileDto {
 	
 	private MultipartFile myFile;
 	
+	public MultipartFile getMyFile() {
+		return myFile;
+	}
+	public void setMyFile(MultipartFile myFile) {
+		this.myFile = myFile;
+	}
 	//디폴트 생성자 
 	public FileDto(){}
 	public FileDto(int num, String writer, String title, String orgFileName, String saveFileName, long fileSize,

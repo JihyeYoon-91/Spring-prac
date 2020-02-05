@@ -1,5 +1,10 @@
 package com.gura.spring05.file.service;
 
-public interface FileService {
+import javax.servlet.http.HttpServletRequest;
 
+import com.gura.spring05.file.dto.FileDto;
+
+public interface FileService {
+	public void list(HttpServletRequest request);
+	public void insert(HttpServletRequest request,FileDto dto);
 }
