@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gura.spring05.file.dao.FileDao;
 import com.gura.spring05.file.dto.FileDto;
@@ -68,7 +69,7 @@ public class FileServiceImpl implements FileService{
 	}
 
 	@Override
-	public void insert(HttpServletRequest request, FileDto dto) {
+	public void saveFile(HttpServletRequest request, FileDto dto) {
 		//파일을 저장할 폴더의 절대 경로를 얻어온다.
 		String realPath=request.getServletContext().getRealPath("/upload");
 		//콘솔창에 테스트 출력
@@ -93,7 +94,7 @@ public class FileServiceImpl implements FileService{
 				System.currentTimeMillis()+orgFileName;
 		try{
 			//upload 폴더에 파일을 저장한다.
-			mFile.transferTo(new File(filePath+saveFileName));
+			mFile.transferTo(new File(filePath+saveFileName)); // webapp/upload 경로와 같다
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -108,4 +109,19 @@ public class FileServiceImpl implements FileService{
 
 		
 	}
+	@Override
+	public void getFileData(ModelAndView mView, int num) {
+		//다운로드 시켜줄 파일의 정보를 얻어와서
+		FileDto dto=dao.getData(num);
+		// ModelAndView객체에 담아주기
+		mView.addObject("dto",dto);                
+	}
+
+	@Override
+	public void addDownCount(int num) {
+		//다운로드 횟수 증가시키기
+		dao.addDownCount(num);		
+	}
+	
+	
 }

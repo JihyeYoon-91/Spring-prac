@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gura.spring05.file.dto.FileDto;
@@ -38,7 +39,18 @@ public class FileController {
 	public ModelAndView authUpload(HttpServletRequest request,
 			@ModelAttribute FileDto dto) {
 		
-		service.insert(request, dto);
+		service.saveFile(request, dto);
 		return new ModelAndView("redirect:/file/list.do");
+	}
+	//파일 다운로드 처리
+	@RequestMapping("/file/download")
+	public ModelAndView download(ModelAndView mView,@RequestParam int num) {
+		//다운로드 횟수 증가시키도록
+		service.addDownCount(num);
+		//다운로드 시켜줄 파일데이터를 ModelAndView객체에 담기도록		
+		service.getFileData(mView, num);
+		//view page정보를 ModelAndView객체에 담기
+		mView.setViewName("file/download");
+		return mView;
 	}
 }
