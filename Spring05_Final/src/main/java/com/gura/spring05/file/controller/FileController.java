@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,15 @@ public class FileController {
 		//다운로드 시켜줄 파일데이터를 ModelAndView객체에 담기도록		
 		service.getFileData(mView, num);
 		//view page정보를 ModelAndView객체에 담기
-		mView.setViewName("file/download");
+		mView.setViewName("fileDownView");   
+		// ="/views/fileDownView"가 아니라 bean이름을 먼저 찾기 때문에 가능하다.
+		return mView;
+	}
+	@RequestMapping("/file/delete")
+	public ModelAndView authDelete(ModelAndView mView,
+			HttpServletRequest request) {	
+		service.removeFile(request);
+		mView.setViewName("redirect:/file/list.do");
 		return mView;
 	}
 }

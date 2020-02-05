@@ -2,6 +2,7 @@ package com.gura.spring05.file.service;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gura.spring05.exception.CanNotDeleteException;
 import com.gura.spring05.file.dao.FileDao;
 import com.gura.spring05.file.dto.FileDto;
 
@@ -122,6 +124,26 @@ public class FileServiceImpl implements FileService{
 		//다운로드 횟수 증가시키기
 		dao.addDownCount(num);		
 	}
-	
-	
+
+	@Override
+	public void removeFile(HttpServletRequest request) {
+		//1. 삭제할 파일의 번호를 읽어온다.
+		int num=Integer.parseInt(request.getParameter("num"));
+		//2. 삭제할 파일의 정보를 읽어와서 삭제할 파일의 저장된 파일명을 얻어낸다.
+		FileDto dto=dao.getData(num);
+		//파일 작성자와 로그인된 아이디가 다르면 예외를 발생시킨다.
+		String id=(String)request.getSession().getAttribute("id");
+		if(!id.equals(dto.getWriter())) {
+			//예외를 발생시켜서 메소드가 정상수행되지 않도록 막는다.
+			throw new CanNotDeleteException(); //런타인 이셉션을 상속받고 있음
+		}
+		String saveFileName=dto.getSaveFileName();
+		//3. DB 에서 파일 정보 삭제
+		dao.delete(num);
+		//4. 파일 시스템에서 파일 삭제
+		String path=request.getServletContext().getRealPath("/upload")+
+			File.separator+saveFileName;
+		File f=new File(path);
+		f.delete();				
+	}	
 }
