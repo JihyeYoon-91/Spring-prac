@@ -8,7 +8,7 @@
 </head>
 <body>
 <script>
-	alert("회원 탈퇴 되었습니다.");
+	alert("${id}님 회원 탈퇴 되었습니다.");
 	location.href="${pageContext.request.contextPath }/";
 </script>
 </body>

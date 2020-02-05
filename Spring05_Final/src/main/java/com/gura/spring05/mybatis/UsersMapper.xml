@@ -12,32 +12,32 @@
       VALUES(#{id}, #{pwd}, #{email}, SYSDATE)
    </insert>
    <select id="getPwdHash" parameterType="String" resultType="String">
-   	 SELECT pwd
-	 FROm users
-	 WHERE id=#{inputId}
+	   	 SELECT pwd
+		 FROm users
+		 WHERE id=#{inputId}
    </select>
    <select id="getData" parameterType="String" resultType="usersDto">
-   	SELECT id,pwd,email,regdate,profile
-   	FROM users
-	WHERE id=#{inputId}
+	   	SELECT id,pwd,email,regdate,profile
+	   	FROM users
+		WHERE id=#{inputId}
    </select>
    <update id="updateProfile">
-   UPDATE users
-   SET profile=#{profile}
-   WHERE id=#{id}
+	   UPDATE users
+	   SET profile=#{profile}
+	   WHERE id=#{id}
    </update>
    <update id="updatePwd" parameterType="usersDto">
-   UPDATE users
-   SET pwd=#{pwd}
-   WHERE id=#{id}
+	   UPDATE users
+	   SET pwd=#{pwd}
+	   WHERE id=#{id}
    </update>  
    <update id="updateUser" parameterType="usersDto">
-   UPDATE users
-   SET email=#{email}
-   WHERE id=#{id} 
+	   UPDATE users
+	   SET email=#{email}
+	   WHERE id=#{id} 
    </update>
-   <delete id="deleteUser" parameterType="String">
-   DELETE FROM users
-   WHERE id=#{id}
+   <delete id="delete" parameterType="String">
+	   DELETE FROM users
+	   WHERE id=#{id} <!-- '${id}' 로도 사용가능하며 'gura'와같음    #{id}는 ?로 해놓고 set하는거와 같아서 차이가 있다.-->
    </delete>
 </mapper>

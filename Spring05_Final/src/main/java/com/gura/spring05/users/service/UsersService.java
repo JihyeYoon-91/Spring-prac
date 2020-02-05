@@ -20,7 +20,6 @@ public interface UsersService {
 			MultipartFile mFile);
 	public void updatePassword(UsersDto dto,
 			ModelAndView mView);
-	public void getUser(ModelAndView mView, String id);
-	public void updateUser(ModelAndView mView,UsersDto dto);
-	public void deleteUser(String id,HttpServletRequest request);
+	public void updateUser(UsersDto dto);
+	public void deleteUser(String id);
 }

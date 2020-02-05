@@ -9,20 +9,20 @@
 </head>
 <body>
 <div class="container">
-	<h1>회원정보 수정폼</h1>
+	<h1>개인정보 수정폼</h1>
 	<form action="update.do" method="post">
 		<input type="hidden" name="id" value="${id }"/>
-		<div>
+		<div class="form-group">
 			<label for="id">아이디</label>
-			<input type="text" id="id" value="${id }" disabled/>
+			<input class="form-control" type="text" id="id" value="${id }" disabled/>
 		</div>
-		<div>
+		<div class="form-group">
 			<label for="email">이메일</label>
-			<input type="text" id="email" name="email"
+			<input  class="form-control" type="text" id="email" name="email"
 				value="${dto.email}"/>
 		</div>
-		<button type="submit">수정확인</button>
-		<button type="reset">취소</button>
+		<button class="btn btn-primary" type="submit">수정확인</button>
+		<button class="btn btn-warning" type="reset">취소</button>
 	</form>
 </div>
 </body>

@@ -126,23 +126,16 @@ public class UsersServiceImpl implements UsersService{
 		
 		
 	}
-	@Override
-	public void getUser(ModelAndView mView, String id) {
-		UsersDto dto=dao.getData(id);
-		mView.addObject("dto",dto);			
-	}
 
 	@Override
-	public void updateUser(ModelAndView mView,UsersDto dto) {
-		dao.updateUser(dto);
-		mView.addObject("isSuccess",true);		
+	public void updateUser(UsersDto dto) {
+		dao.updateUser(dto);	
 		
 	}
 
 	@Override
-	public void deleteUser(String id,HttpServletRequest request) {
-		request.getSession().invalidate();
-		dao.deleteUser(id);
+	public void deleteUser(String id) {
+		dao.delete(id);
 		
 	}
 	

@@ -196,27 +196,37 @@ public class UsersController {
 		mView.setViewName("users/pwd_update");
 		return mView;
 	}
-	
+	//회원정보 수정폼 요청처리
 	@RequestMapping("/users/updateform")
 	public ModelAndView authUpdateForm(HttpServletRequest request,ModelAndView mView) {
+		//세션영역에 로그인된 id를 읽어와서
 		String id=(String)request.getSession().getAttribute("id");
-		service.getUser(mView, id);
+		//서비스 메소드를 호출해서 Model and view객체에 회원정보가 담기게하고
+		service.showInfo(id, mView);
+		//view page설정한 다음
 		mView.setViewName("users/updateform");
+		//리턴해준다.
 		return mView;
 	}
 	
-	@RequestMapping("/users/update")
-	 public ModelAndView update(@ModelAttribute("dto") UsersDto dto,
-			 ModelAndView mView) {
-		 //회원정보가 수정되도록 서비스의 메소드 호출
-		 service.updateUser( mView,dto);
-		 mView.setViewName("users/update");
-		 return mView;
+	@RequestMapping(value="/users/update",method=RequestMethod.POST)
+	 public ModelAndView authUpdate(@ModelAttribute("dto") UsersDto dto,
+			 HttpServletRequest request) {
+		 //서비스를 이용해서 수정반영하고
+		 service.updateUser(dto);
+		 //개인정보 보기로 다시 리다이렉트 이동시킨다.
+		 return new ModelAndView("redirect:/users/info.do");
 	  }	
+	
 	@RequestMapping("/users/delete")
-	public String delete(HttpServletRequest request) { 
+	public ModelAndView authDelete(HttpServletRequest request,
+			ModelAndView mView) { 
 		String id=(String)request.getSession().getAttribute("id");
-		service.deleteUser(id,request);
-		return "users/delete"; 
+		//서비스를 이용해서 해당 회원정보 삭제
+		service.deleteUser(id);
+		//로그아웃처리
+		request.getSession().invalidate();
+		mView.setViewName("users/delete");
+		return mView; 
 	}
 }
