@@ -5,15 +5,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>/file/list.jsp</title>
+<title>/cafe/list.jsp</title>
 <jsp:include page="../include/resource.jsp"></jsp:include>
 </head>
 <body>
 <jsp:include page="../include/navbar.jsp">
-	<jsp:param value="file" name="category"/>
+	<jsp:param value="cafe" name="category"/>
 </jsp:include>
 <div class="container">
-	<c:choose>
+	<ol class="breadcrumb">
+		<li><a href="${pageContext.request.contextPath }/cafe/list.do">목록</a></li>
+	</ol>
+		<c:choose>
 		<c:when test="${not empty keyword }">
 			<p>
 				<strong>${keyword} </strong>키워드로 검색된
@@ -24,44 +27,43 @@
 			<p><strong>${totalRow }</strong>개의 파일이 있습니다.</p>
 		</c:otherwise>
 	</c:choose>
-	<h1>파일 목록 입니다.</h1>
+	<h1>글 목록 입니다.</h1>
 	<table class="table table-striped table-condensed">
+		<colgroup>
+			<col class="col-xs-1"/>
+			<col class="col-xs-2"/>
+			<col class="col-xs-5"/>
+			<col class="col-xs-1"/>
+			<col class="col-xs-3"/>
+		</colgroup>
 		<thead>
 			<tr>
-				<th>번호</th>
+				<th>글번호</th>
 				<th>작성자</th>
 				<th>제목</th>
-				<th>파일명</th>
-				<th>파일크기</th>
-				<th>다운횟수</th>
+				<th>조회수</th>
 				<th>등록일</th>
-				<th>삭제</th>
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach var="tmp" items="${list }">
+		<c:forEach var="tmp" items="${requestScope.list }">
 			<tr>
 				<td>${tmp.num }</td>
 				<td>${tmp.writer }</td>
-				<td>${tmp.title }</td>
 				<td>
-					<a href="download.do?num=${tmp.num }">
-						${tmp.orgFileName }
+					<a href="detail.do?num=${tmp.num }">
+						${tmp.title }
 					</a>
 				</td>
-				<td>${tmp.fileSize }</td>
-				<td>${tmp.downCount }</td>
+				<td>${tmp.viewCount }</td>
 				<td>${tmp.regdate }</td>
-				<td>
-					<c:if test="${tmp.writer eq sessionScope.id }">
-						<a href="javascript:deleteConfirm(${tmp.num })">삭제</a>
-					</c:if>
-				</td>
-			</tr>		
+			</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	<a href="upload_form.do">파일 업로드</a>
+	
+	<a href="insertform.do">새글 작성</a>
+	
 	<div class="page-display">
 		<ul class="pagination pagination-sm">
 			<c:choose>
@@ -77,7 +79,7 @@
 				</c:otherwise>
 			</c:choose>
 			<c:forEach var="i" begin="${startPageNum }" 
-					end="${endPageNum }" step="1">
+				end="${endPageNum }">
 				<c:choose>
 					<c:when test="${i eq pageNum }">
 						<li class="active">
@@ -104,12 +106,11 @@
 				</c:otherwise>
 			</c:choose>
 		</ul>
-	</div>
-	
+	</div>	
 	<form action="list.do" method="get"> <%-- <c:if test="${condition eq 'titlename' }">selected</c:if>	 --%>
 		<label for="condition">검색조건</label>
 		<select name="condition" id="condition">
-			<option value="titlename" <c:if test="${condition eq 'titlename' }">selected</c:if>>제목+파일명</option>
+			<option value="titlename" <c:if test="${condition eq 'titlename' }">selected</c:if>>제목+내용</option>
 			<option value="title" <c:if test="${condition eq 'title' }">selected</c:if>>제목</option>
 			<option value="writer" <c:if test="${condition eq 'writer' }">selected</c:if>>작성자</option>
 		</select>
@@ -117,24 +118,6 @@
 			placeholder="검색어 ..." value="${keyword }"/>
 		<button type="submit">검색</button>
 	</form><!-- condition이라는 파라미터 명으로 넘어간다. -->
-</div><!-- container -->
-<script>
-	//삭제 여부를 확인하고 삭제를 진행하는 javascript 함수 
-	function deleteConfirm(num){
-		var isDelete=confirm(num+" 번 파일을 삭제 하시겠습니까?");
-		if(isDelete){
-			location.href="delete.do?num="+num;
-		}
-	}
-</script>
+</div>
 </body>
-
-
-
 </html>
-
-
-
-
-
-

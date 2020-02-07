@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="file">
-	<select id="getCount" resultType="int">
-		SELECT MAX(ROWNUM)
+	<select id="getCount" resultType="int" parameterType="fileDto">
+		SELECT NVL(MAX(ROWNUM),0)
 		FROM board_file
+		<choose>
+			<when test="title != null and orgFileName != null">
+				WHERE title LIKE '%'||#{title}||'%' 
+				OR orgFileName LIKE'%${orgFileName}'
+			</when>							<!-- #은 set하는거고	 -->
+			<when test="title != null">
+				WHERE title LIKE '%${title}%'  <!-- $는 미리만들ㄹ어놓고 실행한다 이엘아님..마이바티스문임!-->
+			</when>
+			<when test="writer !=null">
+				WHERE writer LIKE '%${writer}%'
+			</when>
+		</choose>
 	</select>
 	<select id="getList" parameterType="fileDto" resultType="fileDto">
 		SELECT *
@@ -11,7 +23,19 @@
 			(SELECT result1.*, ROWNUM AS rnum
 			FROM
 				(SELECT num,writer,title,orgFileName,fileSize,downCount,regdate
-				FROM board_file
+				FROM board_file		
+				<choose>
+					<when test="title != null and orgFileName != null">
+						WHERE title LIKE '%'||#{title}||'%' 
+						OR orgFileName LIKE'%${orgFileName}'
+					</when>							<!-- #은 set하는거고	 -->
+					<when test="title != null">
+						WHERE title LIKE '%${title}%'  <!-- $는 미리만들ㄹ어놓고 실행한다 이엘아님..마이바티스문임!-->
+					</when>
+					<when test="writer !=null">
+						WHERE writer LIKE '%${writer}%'
+					</when>
+				</choose>
 				ORDER BY num DESC) result1)
 		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}
 	</select>
@@ -35,4 +59,5 @@
 		DELETE FROM board_file
 		WHERE num=#{num}
 	</delete>
+	
 </mapper>

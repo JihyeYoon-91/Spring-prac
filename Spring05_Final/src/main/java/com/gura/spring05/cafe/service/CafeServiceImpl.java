@@ -1,4 +1,4 @@
-package com.gura.spring05.file.service;
+package com.gura.spring05.cafe.service;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -12,33 +12,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gura.spring05.cafe.dao.CafeDao;
+import com.gura.spring05.cafe.dto.CafeDto;
 import com.gura.spring05.exception.CanNotDeleteException;
-import com.gura.spring05.file.dao.FileDao;
-import com.gura.spring05.file.dto.FileDto;
+
 
 @Service
-public class FileServiceImpl implements FileService{
-	@Autowired
-	private FileDao dao;
+public class CafeServiceImpl implements CafeService{
 
+	@Autowired
+	private CafeDao dao;
+	
 	@Override
 	public void list(HttpServletRequest request) {
-		/*
-		 * request 에 검색 keyword가 전달될 수도 있고 안될수도 있다.
-		 * -전달 안되는 경우 : navbar에서 파일목록보기를 누른경우
-		 * -전달 되는 경우 : 하단에 검색어를 입력하고 검색버튼을 누른 경우
-		 * -전달되는 경우2: 이미 검색을 한 상태에서 하단 페이지 번호를 누른경우
-		 */
-		//검색과 관련된 파라미터를 읽어와 본다.
+
 		String keyword=request.getParameter("keyword");
 		String condition=request.getParameter("condition");
 		
 		//검색 키워드가 존재한다면 키워드를 담을 FileDto 객체 생성 
-		FileDto dto=new FileDto();
+		CafeDto dto=new CafeDto();
 		if(keyword != null) {//검색 키워드가 전달된 경우
 			if(condition.equals("titlename")) {//제목+파일명 검색
 				dto.setTitle(keyword);
-				dto.setOrgFileName(keyword);
+				dto.setContent(keyword);
 			}else if(condition.equals("title")) {//제목 검색
 				dto.setTitle(keyword);
 			}else if(condition.equals("writer")) {//작성자 검색
@@ -97,8 +93,7 @@ public class FileServiceImpl implements FileService{
 		dto.setStartRowNum(startRowNum);
 		dto.setEndRowNum(endRowNum);
 		
-		//1. DB 에서 파일 목록을 얻어온다.
-		List<FileDto> list=dao.getList(dto);
+		List<CafeDto> list=dao.getList(dto);
 		//2. view page에 필요한 값을 request에 담아둔다. modelandview에 담아도됌
 		request.setAttribute("pageNum",pageNum);
 		request.setAttribute("startPageNum",startPageNum);
@@ -108,80 +103,49 @@ public class FileServiceImpl implements FileService{
 		request.setAttribute("totalRow",totalRow);
 	}
 
-	@Override
-	public void saveFile(HttpServletRequest request, FileDto dto) {
-		//파일을 저장할 폴더의 절대 경로를 얻어온다.
-		String realPath=request.getServletContext().getRealPath("/upload");
-		//콘솔창에 테스트 출력
-		System.out.println(realPath);
-		
-		//MultipartFile 객체의 참조값 얻어오기
-		//FileDto 에 담긴 MultipartFile 객체의 참조값을 얻어온다.
-		MultipartFile mFile=dto.getMyFile();
-		//원본 파일명
-		String orgFileName=mFile.getOriginalFilename();
-		//파일 사이즈
-		long fileSize=mFile.getSize();
-		//저장할 파일의 상세 경로
-		String filePath=realPath+File.separator;
-		//디렉토리를 만들 파일 객체 생성
-		File file=new File(filePath);
-		if(!file.exists()){//디렉토리가 존재하지 않는다면
-			file.mkdir();//디렉토리를 만든다.
-		}
-		//파일 시스템에 저장할 파일명을 만든다. (겹치치 않게)
-		String saveFileName=
-				System.currentTimeMillis()+orgFileName;
-		try{
-			//upload 폴더에 파일을 저장한다.
-			mFile.transferTo(new File(filePath+saveFileName)); // webapp/upload 경로와 같다
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		//FileDto 객체에 추가 정보를 담는다.
-		String id=(String)request.getSession().getAttribute("id");
-		dto.setWriter(id); //작성자
-		dto.setOrgFileName(orgFileName);
-		dto.setSaveFileName(saveFileName);
-		dto.setFileSize(fileSize);
-		//FileDao 객체를 이용해서 DB 에 저장하기
-		dao.insert(dto);			
 
+	@Override
+	public void insert(HttpServletRequest request, CafeDto dto) {
+		String title=request.getParameter("title");
+		String content=request.getParameter("content");		
+		String writer=(String)request.getSession().getAttribute("id");	 
+		dto=new CafeDto();
+		dto.setWriter(writer);
+		dto.setTitle(title);
+		dto.setContent(content);
+		dao.insert(dto);
 		
 	}
-	@Override
-	public void getFileData(ModelAndView mView, int num) {
-		//다운로드 시켜줄 파일의 정보를 얻어와서
-		FileDto dto=dao.getData(num);
-		// ModelAndView객체에 담아주기
-		mView.addObject("dto",dto);                
-	}
+
 
 	@Override
-	public void addDownCount(int num) {
-		//다운로드 횟수 증가시키기
-		dao.addDownCount(num);		
+	public void getCafe(ModelAndView mView,int num) {	
+		dao.addViewCount(num);
+		CafeDto dto=dao.getCafe(num);
+		mView.addObject("dto",dto);  
 	}
 
+
 	@Override
-	public void removeFile(HttpServletRequest request) {
-		//1. 삭제할 파일의 번호를 읽어온다.
+	public void updateCafe(CafeDto dto) {
+		dao.updateCafe(dto);
+		
+	}
+
+
+	@Override
+	public void removeCafe(HttpServletRequest request) {
 		int num=Integer.parseInt(request.getParameter("num"));
-		//2. 삭제할 파일의 정보를 읽어와서 삭제할 파일의 저장된 파일명을 얻어낸다.
-		FileDto dto=dao.getData(num);
-		//파일 작성자와 로그인된 아이디가 다르면 예외를 발생시킨다.
+		CafeDto dto=dao.getCafe(num);
 		String id=(String)request.getSession().getAttribute("id");
 		if(!id.equals(dto.getWriter())) {
 			//예외를 발생시켜서 메소드가 정상수행되지 않도록 막는다.
 			throw new CanNotDeleteException(); //런타인 이셉션을 상속받고 있음
 		}
-		String saveFileName=dto.getSaveFileName();
-		//3. DB 에서 파일 정보 삭제
 		dao.delete(num);
-		//4. 파일 시스템에서 파일 삭제
-		String path=request.getServletContext().getRealPath("/upload")+
-			File.separator+saveFileName;
-		File f=new File(path);
-		f.delete();				
-	}	
+		
+	}
+
+
+
 }

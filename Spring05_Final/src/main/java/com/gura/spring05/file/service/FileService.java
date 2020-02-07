@@ -12,4 +12,5 @@ public interface FileService {
 	public void getFileData(ModelAndView mView,int num);
 	public void addDownCount(int num);
 	public void removeFile(HttpServletRequest request);
+	
 }

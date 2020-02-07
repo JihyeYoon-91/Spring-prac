@@ -15,9 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class ExceptionController {
 	//CanNotDeleteException type의 예외가 발생하면 호출되는 메소드	
-   @ResponseStatus(HttpStatus.FORBIDDEN) //브라우저에서 네트워크의 응답상태도 정상상태가 아닌 예외상태로 표기해준다.
+   
+	@ResponseStatus(HttpStatus.FORBIDDEN) //브라우저에서 네트워크의 응답상태도 정상상태가 아닌 예외상태로 표기해준다.
    @ExceptionHandler(CanNotDeleteException.class)
-   public ModelAndView conNotDelete() {
+   public ModelAndView canNotDelete() {
       
       ModelAndView mView=new ModelAndView();
       mView.addObject("msg", "남의 파일 지우면 혼난다~");
